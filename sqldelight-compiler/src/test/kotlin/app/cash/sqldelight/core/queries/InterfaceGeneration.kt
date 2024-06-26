@@ -964,8 +964,8 @@ class InterfaceGeneration {
       |    WHERE item.id = :id
       |    UNION ALL
       |    SELECT item.id, item.parent_id
-      |    FROM item, descendants
-      |    WHERE item.id = descendants.parent_id
+      |    FROM item, descendants d
+      |    WHERE item.id = d.parent_id
       |)
       |SELECT descendants.id, descendants.parent_id
       |FROM descendants;
@@ -1049,8 +1049,8 @@ class InterfaceGeneration {
       |    |    WHERE item.id = ?
       |    |    UNION ALL
       |    |    SELECT item.id, item.parent_id
-      |    |    FROM item, descendants
-      |    |    WHERE item.id = descendants.parent_id
+      |    |    FROM item, descendants d
+      |    |    WHERE item.id = d.parent_id
       |    |)
       |    |SELECT descendants.id, descendants.parent_id
       |    |FROM descendants

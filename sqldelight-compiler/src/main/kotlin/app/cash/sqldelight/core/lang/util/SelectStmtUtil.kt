@@ -33,7 +33,17 @@ internal fun PsiElement.referencedTables(
   compoundSelectStmt: SqlCompoundSelectStmt? = null,
 ): List<TableNameElement> = when (this) {
   is SqlCompoundSelectStmt -> tablesObserved()
-  is SqlTableAlias -> source().referencedTables()
+  is SqlTableAlias -> {
+    val source = source()
+    val referenceParent = source.reference?.resolve()?.parent
+    if (referenceParent is SqlCteTableName) {
+      // Recursive subquery. We've already resolved the other tables in this recursive query
+      // so quit out.
+      emptyList()
+    } else {
+      source.referencedTables()
+    }
+  }
   is SqlNewTableName -> {
     listOf(TableNameElement.NewTableName(this))
   }
